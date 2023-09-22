@@ -79,9 +79,9 @@ CREATE TABLE IF NOT EXISTS item (
 -- USING (CURSO_ID);
 
 --########################################################
---#    DADOS DE "REAIS" PARA PRODUÇÃO USAR COM CUIDADO!  #
+--#          DADOS DE "REAIS" PARA PRODUÇÃO              #
 --########################################################
 
--- INSERT OR IGNORE INTO USUARIO	(EMAIL, SENHA_SHA256, RECUPERA_SENHA, ADMINISTRADOR, CURSO_ID, LOCAL_TXT, LOCAL_LAT, LOCAL_LON)
--- VALUES
---     ('eu@dot.com', 'root', 0, 0, 1, '', 0, 0);
+INSERT OR IGNORE INTO usuario (email, password, is_admin)
+VALUES
+    ('root@root.com', '-5078283684866250020', 1);

@@ -4,3 +4,4 @@ site-log.log
 /__pycache__
 *.log
 *.log
+company_stock.db

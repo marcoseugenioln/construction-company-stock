@@ -9,7 +9,7 @@
 
 - Abrir o prompt de comando e clonar o repositório usando o comando:
 ```bash
-    git clone https://github.com/marcoseugenioln/univesp-projeto-integrador-01.git
+    git clone https://github.com/marcoseugenioln/construction-company-stock.git
 ```
 
 - Abrir o prompt de comando na pasta do repositório e executar o comando:
