@@ -1,0 +1,6 @@
+
+*.pyc
+site-log.log
+/__pycache__
+*.log
+*.log
