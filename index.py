@@ -20,9 +20,9 @@ database = Database()
  
 @app.route("/")
 def index():
-        return redirect(url_for(f'login'))
+        return redirect(url_for(f'auth/login'))
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/auth/login', methods=['GET', 'POST'])
 def login():
 
     is_login_valid = True
@@ -46,58 +46,33 @@ def login():
     
     return render_template('login.html', is_login_valid = is_login_valid)
 
-@app.route("/sign-in", methods=['GET','POST'])
-def sign_in():
+@app.route("/auth/register", methods=['GET','POST'])
+def register():
 
     is_password_valid = True
     is_email_valid = True
 
-    courses = database.get_courses()
 
-    if (request.method == 'POST' and 'email' in request.form and 'password' in request.form and 'password_c' in request.form and 'local_txt' in request.form and 'course' in request.form):
+    if (request.method == 'POST' and 'email' in request.form and 'password' in request.form and 'password_c' in request.form):
         
         email = request.form['email']
         password = request.form['password']
         password_c = request.form['password_c']
-        local_txt = request.form['local_txt']
-        course = request.form['course']
 
-        response = requests.get(f'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyAGVxQoVpwxbdrDaaXy4Ok6ao_MiURaIrU&address={urllib.parse.quote(local_txt, safe="")}')
-        location = response.json()['results'][0]['geometry']['location']
-        latitude = location['lat']
-        longitude = location['lng']
-
-        if database.insert_user(email, password, password_c, local_txt, latitude, longitude, course):
+        if database.insert_user(email, password, password_c):
             return redirect(url_for('login'))
+        
         else:
             if len(email) > 300:
                 is_email_valid = False
+
             elif len(password)> 64:
                 is_password_valid = False
+
             elif password_c != password:
                 is_password_valid = False                
     
-    return render_template('register.html', is_password_valid = is_password_valid, is_email_valid = is_email_valid, courses=courses)
-
-
-
-def ajustaComparativo(base, ref):
-    fator = math.pi / 180
-    ref_lat, ref_lon = ref
-    ref_lat = ref_lat * fator
-    ref_lon = ref_lon * fator
-    resp = []
-    for x in base:
-        logger.info(x)
-        _, _, faculdade, _, local_lat, local_lon, cpv, cpv_1, cpv_2 = x
-
-        # gambiarra
-        if cpv_2 == None:
-            cpv_2 = 0
-
-        resp.append((faculdade, round(chord_length_sc(local_lon * fator, local_lat * fator, ref_lon, ref_lat), 2), round(cpv, 2), round(cpv_1, 2), round(cpv_2, 2)))
-
-    return resp
+    return render_template('register.html', is_password_valid = is_password_valid, is_email_valid = is_email_valid)
 
 @app.route('/busca/<user_id>', methods=['GET', 'POST'])
 def busca(user_id):
@@ -238,27 +213,12 @@ def profile(user_id):
     if (request.method == 'POST' and 'password' in request.form and 'password_c' in request.form):
         database.alter_password(user_id, request.form['password'])
 
-    if (request.method == 'POST' and 'course' in request.form):
-        database.alter_course(user_id, request.form['course'])
-
-    if (request.method == 'POST' and 'local_txt' in request.form):
-
-        local_txt = request.form['local_txt']
-
-        database.alter_local(user_id, local_txt)
-
     email = database.get_user_email(user_id)
-    local = database.get_user_local(user_id)
 
     return render_template(
         'profile.html', 
         user_id = user_id, 
-        email = email, 
-        local = local, 
-        lat = database.get_user_latitude(user_id), 
-        lng = database.get_user_longitude(user_id), 
-        course = database.get_user_course(user_id),
-        courses = database.get_courses(),
+        email = email,
         is_admin = database.is_admin(user_id)
         )
 

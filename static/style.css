@@ -1,0 +1,24 @@
+.invalid{
+    color:red;
+    font-size: 14px;
+}
+
+.valid{
+    color:green;
+    font-size: 14px;
+}
+
+#map{
+    width: 500px;
+    height: 500px;
+}
+
+#pac-input{
+    width: 300px;
+}
+#curso_cb
+{
+    width: 168px;
+    height: 20px;
+}
+
