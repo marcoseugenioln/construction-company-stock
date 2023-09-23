@@ -1,10 +1,17 @@
--- SQL de criação do banco de dados para a ferramenta minhaFacul
+-- usuario definition
+CREATE TABLE IF NOT EXISTS usuario (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	email TEXT(300),
+	password TEXT(64),
+	is_admin INTEGER DEFAULT (0),
+	CONSTRAINT usuario_un UNIQUE (email)
+);
 
 -- fornecedor definition
 CREATE TABLE IF NOT EXISTS fornecedor (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	nome TEXT(300),
-	CONSTRAINT FACULDADE_UN UNIQUE (nome)
+	CONSTRAINT fornecedor_un UNIQUE (nome)
 );
 
 -- material definition
@@ -17,15 +24,6 @@ CREATE TABLE IF NOT EXISTS material (
 	estoque_minimo INTEGER,
 	CONSTRAINT material_un UNIQUE (nome),
 	CONSTRAINT material_fk FOREIGN KEY (fornecedor_id) REFERENCES fornecedor(id)
-);
-
--- usuario definition
-CREATE TABLE IF NOT EXISTS usuario (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	email TEXT(300),
-	password TEXT(64),
-	is_admin INTEGER DEFAULT (0),
-	CONSTRAINT USUARIO_UN UNIQUE (email)
 );
 
 -- pedido definition
@@ -82,6 +80,4 @@ CREATE TABLE IF NOT EXISTS item (
 --#          DADOS DE "REAIS" PARA PRODUÇÃO              #
 --########################################################
 
-INSERT OR IGNORE INTO usuario (email, password, is_admin)
-VALUES
-    ('root@root.com', '-5078283684866250020', 1);
+INSERT OR IGNORE INTO usuario (email, password, is_admin) VALUES ('root@root.com', '-5078283684866250020', 1);
