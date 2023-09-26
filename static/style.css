@@ -1,24 +1,18 @@
-.invalid{
+.error-message{
     color:red;
     font-size: 14px;
 }
 
-.valid{
+.success-mesage{
     color:green;
     font-size: 14px;
 }
 
-#map{
-    width: 500px;
-    height: 500px;
+.btn{
+    background-color:dimgray;
+    color:aliceblue;
+    font-size: 14px;
+    width: 120px;
+    height: 30px;
+    border-radius: 10px;
 }
-
-#pac-input{
-    width: 300px;
-}
-#curso_cb
-{
-    width: 168px;
-    height: 20px;
-}
-

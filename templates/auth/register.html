@@ -6,17 +6,17 @@
 </head>
 
 <body>
-    <a href="/login" type="button">login</a>
+
     <hr><h1>Registrar Cadastro</h1><hr>
 
     <div class="tema">
         <div class="int">
-            <form method="POST">
+            <form action="/fornecedor">
                 
                 <br/>Email:
                 <br/><input type="text" name="email"/> <br/>
                 {% if not is_email_valid %}
-                    <p class="invalid"> Email inválido </p>
+                    <p class="error-message"> Email inválido </p>
                 {% endif %}
 
                 <br/>Senha:
@@ -25,22 +25,10 @@
                 <br/>Confirmar Senha:
                 <br/><input type="password" name="password_c"/> <br/>
                 {% if not is_password_valid %}
-                    <p class="invalid"> Senha inválida </p>
+                    <p class="error-message"> Senha inválida </p>
                 {% endif %}
                 
-                <br/>Selecionar Curso:<br/>
-                <select id="curso_cb" name="course">
-                    {% for id, nome in courses %}
-                        <option value="{{id}}">{{nome}}</option>
-                    {% endfor %}
-                </select>
-                <br/>
-                
-                <br/>Endereço:
-                <input id="pac-input" class="controls" type="text" placeholder="Procurar Endereço" name = "local_txt"/>
-                <div id="map"></div>
-                
-                <br/> <input type="submit" value="Entrar"/>
+                <br/> <input type="submit" value="Registrar-se"/>
             </form>
         </div>
     </div>  
