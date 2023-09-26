@@ -2,19 +2,37 @@
 <html>
 
 <head>
-    <title>FlaskTest</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+    <title>Página Inicial</title>
 </head>
  
 <body>
-    <h2>Welcome To my Flask Application</h2>
-    <h4>Flask: Rendering Templates</h4>
+    <hr><h1>Página Inicial</h1><hr>
     
     <!-- this section can be replaced by a child document -->  
-    {% block body %}
-    
-    <p>This is a Flask application.</p>
-    
-    {% endblock %}
+    <br><tr>
+        <form action="/fornecedor">
+        <td><input type="submit" class="btn" value="Fornecedores" formmethod="post"></td>
+        </form>
+    </tr>
+
+    <br><tr>
+        <form action="/material">
+        <td><input type="submit" class="btn" value="Materiais" formmethod="post"></td>
+        </form>
+    </tr>
+
+    <br><tr>
+        <form action="/pedido">
+        <td><input type="submit" class="btn" value="Pedidos" formmethod="post"></td>
+        </form>
+    </tr>
+
+    <br><tr>
+        <form action="/usuario">
+        <td><input type="submit" class="btn" value="Usuario" formmethod="post"></td>
+        </form>
+    </tr>
  
 </body>
  

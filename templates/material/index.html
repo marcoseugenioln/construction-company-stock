@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Fornecedores</title>
+</head>
+ 
+<body>
+    {% include 'header.html'%}
+    <hr><h1>Fornecedores</h1><hr>
+
+    <table>
+
+        <!-- this section can be replaced by a child document -->  
+        {% for fornecedor_id, nome in fornecedores %}
+            {% if is_admin %}
+                    {% include '/fornecedor/update.html'%}
+            {% else %}
+                <tr>
+                    <td><label>{{ fornecedor_id }}</label></td><td><label>{{ nome }}</label></td>
+                </tr>
+            {% endif %}              
+        {% endfor %}
+            
+    </table>
+
+    {% if is_admin %}
+        {% include '/fornecedor/create.html' %}
+    {% endif %}  
+ 
+</body>
+ 
+</html>

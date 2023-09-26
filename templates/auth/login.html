@@ -1,16 +1,16 @@
 <html>  
     <head> 
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
         <title> Login </title> 
     </head>
 
     <body>
         <hr><h1>LOGIN</h1><hr>
         {% if not is_login_valid %}
-            <p id="invalid-login"> Login inválido </p>
+            <p class="error-message"> Login inválido </p>
         {% endif %}
         {% if user_registered %}
-            <p id="user-registered"> Usuário registrado </p>
+            <p class="success-message"> Usuário registrado </p>
         {% endif %}
 
         <div class="tema">
@@ -27,9 +27,10 @@
                     <br/><input type="checkbox" name="lembrar-me" value="lembrar-me">Lembrar-me<br><br/>
                     <br/><input type="submit" value="Entrar"/> <br/>
 
-                    <br/><a type="submit"value="Registrar-se"></a> 
-                    <a href="/register" type="button">Registrar-se</a> <br/>
+                </form>
 
+                <form action="/register">
+                    <td><input type="submit" value="Registrar-se" formmethod="post"></td>
                 </form>
 
             </div>
