@@ -31,23 +31,45 @@ class Database():
         
         return True
     
-    def insert_user(self, email: str, password: str, password_c: str) -> bool:        
-        self.query.execute(f"INSERT OR IGNORE INTO usuario(email, password) values ('{email}', '{password}');")
-        logger.info(f"INSERT OR IGNORE INTO usuario(email, password) values ('{email}', '{password}');")
+    def get_user_id(self, email: str, password: str):
+        logger.info(f"SELECT id FROM usuario WHERE email == '{email}' AND password == '{password}';")
+        self.query.execute(f"SELECT id FROM usuario WHERE email == '{email}' AND password == '{password}';")
+        user_id = self.query.fetchone()[0]   
+        return user_id
+
+    def get_admin(self, user_id):
+        logger.info(f"SELECT is_admin FROM usuario WHERE id == {user_id};")
+        self.query.execute(f"SELECT is_admin FROM usuario WHERE id == {user_id};")
+        is_admin = self.query.fetchone()
+
+        if int(is_admin[0]) == 0:
+            return False
+        
+        return True
+    
+    def insert_user(self, email: str, password: str, is_admin: str) -> bool:        
+        self.query.execute(f"INSERT OR IGNORE INTO usuario(email, password, is_admin) values ('{email}', '{password}', {is_admin});")
+        logger.info(f"INSERT OR IGNORE INTO usuario(email, password, is_admin) values ('{email}', '{password}', {is_admin});")
         self.connection.commit()
         return True
     
     def get_user_email(self, user_id: int) -> str:
         self.query.execute(f"SELECT email FROM usuario WHERE id == '{user_id}'")
         logger.info(f"SELECT email FROM usuario WHERE id == '{user_id}'")
-        email = self.query.fetchone()
-        return email[0]
+        email = self.query.fetchone()[0]
+        return email
 
-    def get_user_id(self, email: str, password: str):
-        self.query.execute(f"SELECT id FROM usuario WHERE email == '{email}' AND password == '{hash(str(password))}'")
-        logger.info(f"SELECT id FROM usuario WHERE email == '{email}' AND password == '{password}'")
-        user_id = self.query.fetchone()        
-        return user_id
+    def get_user_password(self, user_id: int) -> str:
+        self.query.execute(f"SELECT password FROM usuario WHERE id == '{user_id}'")
+        logger.info(f"SELECT password FROM usuario WHERE id == '{user_id}'")
+        password = self.query.fetchone()[0]
+        return password
+    
+    def get_users(self):
+        self.query.execute(f"SELECT id, email, password FROM usuario")
+        logger.info(f"SELECT id, email, password FROM usuario")
+        users = self.query.fetchall()        
+        return users
     
     def alter_password(self, user_id, password):
         self.query.execute(f"UPDATE usuario SET password = '{password}' WHERE id == {user_id}")
@@ -59,16 +81,20 @@ class Database():
         logger.info(f"UPDATE usuario SET email = '{email}' WHERE id == {user_id}")
         self.connection.commit()
 
-    def is_admin(self, user_id):
-        self.query.execute(f"SELECT is_admin FROM usuario WHERE id == {user_id}")
-        logger.info(f"SELECT is_admin FROM usuario WHERE id == {user_id}")
-        is_admin = self.query.fetchone()
-        return is_admin
+    def delete_user(self, id):
+        self.query.execute(f"DELETE FROM usuario WHERE id == {id};")
+        logger.info(f"DELETE FROM usuario WHERE id == {id};")
+        self.connection.commit()
 
     def get_suppliers(self):
         self.query.execute("SELECT id, nome FROM fornecedor")
         suppliers = self.query.fetchall()
         return suppliers
+    
+    def get_supplier(self, id):
+        self.query.execute(f"SELECT nome FROM fornecedor WHERE id == {id}")
+        supplier = self.query.fetchone()[0]
+        return supplier
     
     def insert_supplier(self, name):
         self.query.execute(f"INSERT OR IGNORE INTO fornecedor (nome) VALUES ('{name}');")
@@ -106,3 +132,25 @@ class Database():
         self.query.execute(f"DELETE FROM material WHERE id == {id};")
         logger.info(f"DELETE FROM material WHERE id == {id};")
         self.connection.commit()
+
+    def get_orders(self):
+        self.query.execute("SELECT id, usuario_id, data_compra FROM pedido")
+        orders = self.query.fetchall()
+        return orders
+    
+    def insert_order(self, supplier_id, name, value, stock, min_stock):
+        self.query.execute(f"INSERT OR IGNORE INTO material (fornecedor_id, nome, valor, estoque, estoque_minimo) VALUES ({supplier_id}, '{name}', {value}, {stock}, {min_stock});")
+        logger.info(f"INSERT OR IGNORE INTO material (fornecedor_id, nome, valor, estoque, estoque_minimo) VALUES ({supplier_id}, '{name}', {value}, {stock}, {min_stock});")
+        self.connection.commit()
+        return True
+    
+    def update_order(self, id, supplier_id, name, value, stock, min_stock):
+        self.query.execute(f"UPDATE material SET fornecedor_id = {supplier_id}, nome = '{name}', valor = {value}, estoque = {stock}, estoque_minimo = {min_stock} WHERE id == {id};")
+        logger.info(f"UPDATE material SET fornecedor_id = {supplier_id}, nome = '{name}', valor = {value}, estoque = {stock}, estoque_minimo = {min_stock} WHERE id == {id};")
+        self.connection.commit()
+
+    def delete_order(self, id):
+        self.query.execute(f"DELETE FROM pedido WHERE id == {id};")
+        logger.info(f"DELETE FROM pedido WHERE id == {id};")
+        self.connection.commit()
+        

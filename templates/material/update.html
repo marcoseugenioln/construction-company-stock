@@ -2,7 +2,7 @@
     <form action="/material/update/{{ id }}">
 
         <td><label>{{ id }}</label></td>
-        <td><input type="text" name="name" value="{{nome}}"></td>
+        <td><input type="text" class="text-field" name="name" value="{{nome}}"></td>
         <td><select class="combo-box" name="supplier_id">
             {% for cb_fornecedor_id, fornecedor_nome in fornecedores %}
                 {%if cb_fornecedor_id == fornecedor_id %}
@@ -12,9 +12,9 @@
                 {%endif%}
             {% endfor %}
         </select></td>
-        <td><input type="number" min="0.1" step="any" name="value" value="{{valor}}"></td>
-        <td><input type="number" min="0" step="any" name="stock" value="{{estoque}}" ></td>
-        <td><input type="number" min="0" step="any" name="min_stock" value="{{estoque_minimo}}"></td>
+        <td><input type="number" min="0.1" step="any" class="text-field" name="value" value="{{valor}}"></td>
+        <td><input type="number" min="0" step="any" class="text-field" name="stock" value="{{estoque}}" ></td>
+        <td><input type="number" min="0" step="any" class="text-field" name="min_stock" value="{{estoque_minimo}}"></td>
 
         <td><input type="submit" class="btn" value="Atualizar" formmethod="post"></td>
     </form>

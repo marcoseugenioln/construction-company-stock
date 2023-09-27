@@ -1,11 +1,36 @@
 <tr>
-    <form action="/fornecedor/{{ fornecedor_id }}">
-        <td><label>{{ fornecedor_id }}</label></td>
-        <td><input type="text" name="supplier_name" value="{{ nome }}"></td>
-        <td><input type="submit" value="Atualizar" formmethod="post"></td>
+    <form action="/usuario/update/{{ id }}">
+        <td><label>{{ id }}</label></td>
+        <td><input type="text" class="text-field" name="email" value="{{ email }}"></td>
+        <td><input type="text" class="text-field" name="new_password" value="{{ password }}"></td>
+
+        {% if is_admin %}
+            <td>
+                <select class="combo-box" name="is_admin">
+                    {% if get_admin(id) %}
+                        <option value="0">Usuário</option>
+                        <option value="1" selected>Administrador</option>
+                    {% else %}
+                        <option value="0" selected>Usuário</option>
+                        <option value="1">Administrador</option>
+                    {% endif %}
+                </select>
+            </td>
+        {% else %}
+            <td>
+                <select class="combo-box" name="is_admin" disabled>
+                    <option value="0" selected>Usuário</option>
+                    <option value="1">Administrador</option>
+                </select>
+            </td>
+        {% endif %}
+
+        <td><input type="submit" class="btn" value="Atualizar" formmethod="post"></td>
     </form>
 
-    <form action="/fornecedor/delete/{{fornecedor_id}}">
-    <td><input type="submit" value="Apagar" formmethod="post"></td>
-    </form>
+    {% if i_admin %}
+        <form action="/usuario/delete/{{ id }}">
+            <td><input type="submit" class="btn" value="Apagar" formmethod="post"></td>
+        </form>
+    {% endif %}
 </tr>

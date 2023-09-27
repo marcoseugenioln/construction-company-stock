@@ -2,30 +2,44 @@
 <html>
 
 <head>
-    <title>Fornecedores</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+    {% if is_admin %}
+        <title>Usuários</title>
+    {% else %}
+        <title>Usuário</title>
+    {% endif %}
 </head>
  
 <body>
     {% include 'header.html'%}
-    <hr><h1>Fornecedores</h1><hr>
+    {% if is_admin %}
+        <hr><h1>Usuários</h1><hr>
+    {% else %}
+        <hr><h1>Usuário</h1><hr>
+    {% endif %}
+    
 
     <table>
-
-        <!-- this section can be replaced by a child document -->  
-        {% for fornecedor_id, nome in fornecedores %}
-            {% if is_admin %}
-                    {% include '/fornecedor/update.html'%}
-            {% else %}
-                <tr>
-                    <td><label>{{ fornecedor_id }}</label></td><td><label>{{ nome }}</label></td>
-                </tr>
-            {% endif %}              
-        {% endfor %}
-            
+        <tr>
+            <td><label class="text-field">ID</label></td>
+            <td><label class="text-field">Email</label></td>
+            <td><label class="text-field">Senha</label></td>
+            <td><label class="text-field">Acesso</label></td>
+        </tr>
+        {% if is_admin %}
+            {% for id, email, password in usuarios %}
+                {% include '/usuario/update.html'%}                 
+            {% endfor %}
+        {% else %}
+            {% set id = current_user_id %}
+            {% set email = current_user_email %}
+            {% set password = current_user_password %}
+            {% include '/usuario/update.html'%}  
+        {% endif %}  
     </table>
 
     {% if is_admin %}
-        {% include '/fornecedor/create.html' %}
+        {% include '/usuario/create.html' %}
     {% endif %}  
  
 </body>

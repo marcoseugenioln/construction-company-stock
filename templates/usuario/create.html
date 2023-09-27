@@ -1,8 +1,20 @@
 <tr>
-    <hr><h3>Cadastrar Fornecedores</h3><hr>
-    <form action="/fornecedor/create">
-    <td><input type="text" name="supplier_name" value="" placeholder="Nome do Fornecedor"></td>
-    <td><input type="submit" value="Cadastrar" formmethod="post"></td>
-    <td></td>
+    <hr><h3>Cadastrar Usuário</h3><hr>
+    <form action="/usuario/create">
+        <td><input type="text" class="text-field" name="email" placeholder="Email"></td>
+        <td><input type="text" class="text-field" name="new_password" placeholder="Senha"></td>
+
+        {% if not logged_in %}
+            <td><input type="text" class="text-field" name="c_password" placeholder="Confirmar Senha"></td>
+        {% endif %}
+
+        {% if is_admin %}
+            <td><select class="combo-box" name="is_admin">
+                <option value="0">Usuário</option>
+                <option value="1">Administrador</option>
+            </select></td>
+        {% endif %}
+
+        <td><input type="submit" class="btn" value="Cadastrar" formmethod="post"></td>
     </form>
 </tr>
