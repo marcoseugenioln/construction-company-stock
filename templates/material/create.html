@@ -1,8 +1,19 @@
 <tr>
-    <hr><h3>Cadastrar Fornecedores</h3><hr>
-    <form action="/fornecedor/create">
-    <td><input type="text" name="supplier_name" value="" placeholder="Nome do Fornecedor"></td>
-    <td><input type="submit" value="Cadastrar" formmethod="post"></td>
-    <td></td>
+    <hr><h3>Cadastrar Material</h3><hr>
+    <form action="/material/create">
+
+        <td><input type="text" name="name" value="" placeholder="Nome do Material"></td>
+
+        <select class="combo-box" name="supplier_id">
+            {% for cb_fornecedor_id, fornecedor_nome in fornecedores %}
+                <option value="{{cb_fornecedor_id}}">{{fornecedor_nome}}</option>
+            {% endfor %}
+        </select>
+
+        <td><input type="number" min="0.1" step="any" name="value" value="" placeholder="R$"></td>
+        <td><input type="number" min="0" step="any" name="stock" value="" placeholder="Total em Estoque"></td>
+        <td><input type="number" min="0" step="any" name="min_stock" value="" placeholder="Estoque Mínimo"></td>
+        <td><input type="submit" class="btn" value="Cadastrar" formmethod="post"></td>
+        <td></td>
     </form>
 </tr>

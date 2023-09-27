@@ -2,14 +2,6 @@ from flask import Flask, redirect, url_for, request, render_template, Blueprint,
 from flask import Flask
 from database import Database
 import logging
-import os
-import math
-import sqlite3
-import requests
-import urllib.parse
-import hashlib
-
-
 
 logger = logging.getLogger('werkzeug')
 handler = logging.FileHandler('site-log.log')
@@ -113,6 +105,47 @@ def update_fornecedor(id):
 @app.route('/fornecedor/delete/<id>', methods=['GET', 'POST'])
 def delete_fornecedor(id):
     database.delete_supplier(id)
+    return redirect(url_for('fornecedor'))
+
+@app.route('/material', methods=['GET', 'POST'])
+def material():
+    return render_template('material/index.html', materiais = database.get_materials(), fornecedores = database.get_suppliers(), is_admin = True)
+
+@app.route('/material/create', methods=['GET', 'POST'])
+def create_material():
+
+    if (request.method == 'POST' and 'supplier_id' in request.form and 'name' in request.form and 'value' in request.form and 'stock' in request.form and 'min_stock' in request.form):
+        
+        supplier_id = request.form['supplier_id']
+        name = request.form['name']
+        value = request.form['value']
+        stock = request.form['stock']
+        min_stock = request.form['min_stock']
+
+        if database.insert_material(supplier_id, name, value, stock, min_stock):
+            return redirect(url_for('material'))  
+        
+    return redirect(url_for('material'))
+
+@app.route('/material/update/<id>', methods=['GET', 'POST'])
+def update_material(id):
+
+    if (request.method == 'POST' and 'supplier_id' in request.form and 'name' in request.form and 'value' in request.form and 'stock' in request.form and 'min_stock' in request.form):
+        
+        supplier_id = request.form['supplier_id']
+        name = request.form['name']
+        value = request.form['value']
+        stock = request.form['stock']
+        min_stock = request.form['min_stock']
+
+        if database.update_material(id, supplier_id, name, value, stock, min_stock):
+            return redirect(url_for('material'))  
+        
+    return redirect(url_for('material'))
+
+@app.route('/material/delete/<id>', methods=['GET', 'POST'])
+def delete_material(id):
+    database.delete_material(id)
     return redirect(url_for('fornecedor'))
 
 if __name__ == '__main__':

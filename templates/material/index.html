@@ -2,30 +2,32 @@
 <html>
 
 <head>
-    <title>Fornecedores</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+    <title>Materiais</title>
 </head>
  
 <body>
     {% include 'header.html'%}
-    <hr><h1>Fornecedores</h1><hr>
+    <hr><h1>Materiais</h1><hr>
 
     <table>
-
-        <!-- this section can be replaced by a child document -->  
-        {% for fornecedor_id, nome in fornecedores %}
+        {% for id, fornecedor_id, nome, valor, estoque, estoque_minimo in materiais %}
             {% if is_admin %}
-                    {% include '/fornecedor/update.html'%}
+                    {% include '/material/update.html'%}
             {% else %}
                 <tr>
-                    <td><label>{{ fornecedor_id }}</label></td><td><label>{{ nome }}</label></td>
+                    <td><label>{{ material_id }}</label></td>
+                    <td><label>{{ nome }}</label></td>
+                    <td><label>{{ valor }}</label></td>
+                    <td><label>{{ estoque }}</label></td>
+                    <td><label>{{ estoque_minimo }}</label></td>
                 </tr>
             {% endif %}              
         {% endfor %}
-            
     </table>
 
     {% if is_admin %}
-        {% include '/fornecedor/create.html' %}
+        {% include '/material/create.html' %}
     {% endif %}  
  
 </body>
