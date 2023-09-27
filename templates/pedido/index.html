@@ -10,8 +10,6 @@
     <hr><h1>Fornecedores</h1><hr>
 
     <table>
-
-        <!-- this section can be replaced by a child document -->  
         {% for fornecedor_id, nome in fornecedores %}
             {% if is_admin %}
                     {% include '/fornecedor/update.html'%}
@@ -20,8 +18,7 @@
                     <td><label>{{ fornecedor_id }}</label></td><td><label>{{ nome }}</label></td>
                 </tr>
             {% endif %}              
-        {% endfor %}
-            
+        {% endfor %}      
     </table>
 
     {% if is_admin %}
