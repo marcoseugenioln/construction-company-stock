@@ -16,20 +16,24 @@
 
 .header-btn{
     background-color:mediumblue;
-    border-color:mediumblue;
     color:aliceblue;
     width: 200px;
-    width: 120px;
-    height: 22px;
+    width: 150px;
+    height: 28px;
     font-size: 14px;
     margin:10px;
-    border-style: solid;
+    border-style: none;
+    border-radius: 5px;
 }
 
 .header-btn:active {
     background-color: mediumblue;
     transform: translateY(1px);
     transform: translateX(1px);
+}
+
+.header-btn:hover{
+    background-color:deepskyblue;
 }
 
 .home-div{
@@ -40,13 +44,13 @@
 
 .home-btn{
     background-color:mediumblue;
-    border-color:mediumblue;
     color:aliceblue;
     width: 200px;
     height: 200px;
     margin:50px;
     font-size: 22px;
-    border-style: solid;
+    border-style: none;
+    border-radius: 5px;
 }
 
 .home-btn:active {
@@ -54,22 +58,29 @@
     transform: translateY(1px);
     transform: translateX(1px);
 }
+.home-btn:hover{
+    background-color:deepskyblue;
+}
 
 .btn{
     background-color:mediumblue;
-    border-color:mediumblue;
     color:aliceblue;
     font-size: 14px;
-    width: 120px;
-    height: 22px;
-    border-style: solid;
+    width: 150px;
+    height: 28px;
+    border-style: none;
+    border-radius: 5px;
 }
 
 .btn:active {
     background-color: mediumblue;
     transform: translateY(1px);
     transform: translateX(1px);
-  }
+}
+
+.btn:hover{
+    background-color:deepskyblue;
+}
 
 .combo-box{
     font-size: 14px;
