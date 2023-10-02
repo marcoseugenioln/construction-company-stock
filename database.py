@@ -206,14 +206,28 @@ class Database():
         self.query.execute(f"UPDATE pedido SET usuario_id = {user_id}, data = DATE('now'), status = 0;")
         logger.info(f"UPDATE pedido SET usuario_id = {user_id}, data = DATE('now'), status = 0;")
         self.connection.commit()
+        self.new_order()
+
+    def get_stock(self, material_id):
+        self.query.execute(f"SELECT estoque FROM material WHERE id = {material_id}")
+        logger.info(f"SELECT estoque FROM material WHERE id = {material_id}")
+
+        stock = self.query.fetchone()[0]
+        return int(stock)
+
+    def add_to_stock(self, material_id, quantity):
+        current_stock = self.get_stock(material_id)
+        self.query.execute(f"UPDATE material SET quantidade = {current_stock + quantity}")
+        logger.info(f"UPDATE material SET quantidade = {current_stock + quantity}")
 
     def add_order_items_to_stock(self):
-        return False
+        for item_id, material_id, qtd in self.get_order_items(self.get_open_order_id()):
+            self.add_to_stock(material_id, qtd)
         
     def order_service(self, user_id):
         self.add_order_items_to_stock()
         self.close_order(user_id)
-        self.new_order()
+        
 
     def get_item_value(self, item_id):
         self.query.execute(f"SELECT material_id, quantidade FROM item WHERE id == {item_id};")

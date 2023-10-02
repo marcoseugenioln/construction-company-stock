@@ -40,14 +40,15 @@
 
             </tr> 
 
+            {% if id == view_order_id %}
+                {% if view_order_items == True %}
+                    {% include 'pedido/view.html' %}
+                {% endif %}
+            {% endif %}
+
         {% endfor %}      
     </table>
-
     
-    {% if view_order_items == True %}
-        {% include 'pedido/view.html' %}
-    {% endif %}
-
     {% include '/pedido/create.html' %} 
 </body>
  

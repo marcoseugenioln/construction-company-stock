@@ -233,7 +233,7 @@ def pedido():
 
 @app.route('/pedido/close', methods=['GET', 'POST'])
 def close_pedido():
-    database.close_order()
+    database.close_order(session['user_id'])
     return redirect(url_for('pedido'))
 
 @app.route('/pedido/view/<id>', methods=['GET', 'POST'])
@@ -250,7 +250,7 @@ def view_pedido(id):
         pedidos = database.get_orders(),
         closed_order_items = database.get_order_items(id),
         view_order_items = True,
-        view_order_id = id,
+        view_order_id = int(id),
         is_admin = session['is_admin']
         )
 

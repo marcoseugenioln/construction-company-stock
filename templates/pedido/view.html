@@ -1,6 +1,4 @@
-<div>
-    <hr> 
-    <table>
+<hr>
         <tr>
             <td><label class="text-field">ID</label></td>
             <td><label class="text-field">Material</label></td>
@@ -16,10 +14,8 @@
                 <td><label class="text-field">R$ {{ get_item_value(item_id) }}</label></td>
             </tr>
         {% endfor %}
-    </table>
+    
     <br>
-    <form action="{{url_for('pedido')}}">
+    <!-- <form action="{{url_for('pedido')}}">
         <td><input type="submit" class="btn" value="Fechar" formmethod="post"></td>
-    </form>
-
-</div>
+    </form> -->
