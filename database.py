@@ -217,8 +217,8 @@ class Database():
 
     def add_to_stock(self, material_id, quantity):
         current_stock = self.get_stock(material_id)
-        self.query.execute(f"UPDATE material SET quantidade = {current_stock + quantity}")
-        logger.info(f"UPDATE material SET quantidade = {current_stock + quantity}")
+        self.query.execute(f"UPDATE material SET quantidade = {current_stock + quantity} WHERE id = {material_id}")
+        logger.info(f"UPDATE material SET quantidade = {current_stock + quantity} WHERE id = {material_id}")
 
     def add_order_items_to_stock(self):
         for item_id, material_id, qtd in self.get_order_items(self.get_open_order_id()):
