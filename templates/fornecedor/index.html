@@ -18,14 +18,16 @@
         </tr>
 
         {% for fornecedor_id, nome in fornecedores %}
-            {% if is_admin %}
-                    {% include '/fornecedor/update.html'%}
-            {% else %}
-                <tr>
-                    <td><label class="text-field">{{ fornecedor_id }}</label></td>
-                    <td><label class="text-field">{{ nome }}</label></td>
-                </tr>
-            {% endif %}              
+            {% if fornecedor_id != 0 %}
+                {% if is_admin %}
+                        {% include '/fornecedor/update.html'%}
+                {% else %}
+                    <tr>
+                        <td><label class="text-field">{{ fornecedor_id }}</label></td>
+                        <td><label class="text-field">{{ nome }}</label></td>
+                    </tr>
+                {% endif %} 
+            {% endif %}                           
         {% endfor %}
             
     </table>

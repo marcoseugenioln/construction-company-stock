@@ -86,6 +86,11 @@ class Database():
         logger.info(f"DELETE FROM usuario WHERE id == {id};")
         self.connection.commit()
 
+    def update_user(self, user_id, email, password, is_admin):
+        self.query.execute(f"UPDATE usuario SET email = {email}, password = {password}, is_admin = {is_admin} WHERE id == {user_id};")
+        logger.info(f"UPDATE usuario SET email = {email}, password = {password}, is_admin = {is_admin} WHERE id == {user_id};")
+        self.connection.commit()
+
     def get_suppliers(self):
         self.query.execute("SELECT id, nome FROM fornecedor")
         suppliers = self.query.fetchall()
@@ -133,10 +138,27 @@ class Database():
         logger.info(f"DELETE FROM material WHERE id == {id};")
         self.connection.commit()
 
+    def get_material_value(self, material_id):
+        self.query.execute(f"SELECT valor FROM material WHERE id = { material_id }")
+        logger.info(f"SELECT valor FROM material WHERE id = { material_id }")
+        value = self.query.fetchone()[0]
+        return value
+    
+    def get_material_name(self, material_id):
+        self.query.execute(f"SELECT nome FROM material WHERE id = { material_id }")
+        logger.info(f"SELECT nome FROM material WHERE id = { material_id }")
+        name = self.query.fetchone()[0]
+        return name
+
     def get_orders(self):
-        self.query.execute("SELECT id, usuario_id, data_compra FROM pedido")
+        self.query.execute("SELECT id, usuario_id, data, status FROM pedido")
         orders = self.query.fetchall()
         return orders
+    
+    def get_open_order_id(self):
+        self.query.execute("SELECT id FROM pedido WHERE status == 1")
+        order_id = self.query.fetchone()[0]
+        return order_id
     
     def insert_order(self, supplier_id, name, value, stock, min_stock):
         self.query.execute(f"INSERT OR IGNORE INTO material (fornecedor_id, nome, valor, estoque, estoque_minimo) VALUES ({supplier_id}, '{name}', {value}, {stock}, {min_stock});")
@@ -153,4 +175,78 @@ class Database():
         self.query.execute(f"DELETE FROM pedido WHERE id == {id};")
         logger.info(f"DELETE FROM pedido WHERE id == {id};")
         self.connection.commit()
+
+    def get_order_items(self, order_id):
+        self.query.execute(f"SELECT id, material_id, quantidade FROM item WHERE pedido_id == {order_id}")
+        items = self.query.fetchall()
+        return items
+    
+    def insert_empty_item(self):
+        self.query.execute(f"INSERT INTO item (pedido_id, material_id, quantidade) VALUES ({self.get_open_order_id()}, 0, 0);")
+        logger.info(f"INSERT INTO item (pedido_id, material_id, quantidade) VALUES ({self.get_open_order_id()}, 0, 0);")
+        self.connection.commit()
+        return True
+    
+    def delete_item(self, id):
+        self.query.execute(f"DELETE FROM item WHERE id == {id};")
+        logger.info(f"DELETE FROM item WHERE id == {id};")
+        self.connection.commit()
+
+    def update_item(self, id, material_id, quantity):
+        self.query.execute(f"UPDATE item SET material_id = {material_id}, quantidade = {quantity} WHERE id == {id};")
+        logger.info(f"UPDATE item SET material_id = {material_id}, quantidade = {quantity} WHERE id == {id};")
+        self.connection.commit()
+
+    def new_order(self):
+        self.query.execute(f"INSERT INTO pedido DEFAULT VALUES;")
+        logger.info(f"INSERT INTO pedido DEFAULT VALUES;")
+        self.connection.commit()
+
+    def close_order(self, user_id):
+        self.query.execute(f"UPDATE pedido SET usuario_id = {user_id}, data = DATE('now'), status = 0;")
+        logger.info(f"UPDATE pedido SET usuario_id = {user_id}, data = DATE('now'), status = 0;")
+        self.connection.commit()
+        self.new_order()
+
+    def get_stock(self, material_id):
+        self.query.execute(f"SELECT estoque FROM material WHERE id = {material_id}")
+        logger.info(f"SELECT estoque FROM material WHERE id = {material_id}")
+
+        stock = self.query.fetchone()[0]
+        return int(stock)
+
+    def add_to_stock(self, material_id, quantity):
+        current_stock = self.get_stock(material_id)
+        self.query.execute(f"UPDATE material SET quantidade = {current_stock + quantity} WHERE id = {material_id}")
+        logger.info(f"UPDATE material SET quantidade = {current_stock + quantity} WHERE id = {material_id}")
+
+    def add_order_items_to_stock(self):
+        for item_id, material_id, qtd in self.get_order_items(self.get_open_order_id()):
+            self.add_to_stock(material_id, qtd)
         
+    def order_service(self, user_id):
+        self.add_order_items_to_stock()
+        self.close_order(user_id)
+        
+
+    def get_item_value(self, item_id):
+        self.query.execute(f"SELECT material_id, quantidade FROM item WHERE id == {item_id};")
+        logger.info(f"SELECT material_id, quantidade FROM item WHERE id == {item_id};")
+
+        response = self.query.fetchone()
+
+        material_id = response[0]
+        quantity = response[1]
+
+        item_value = self.get_material_value(material_id) * quantity
+
+        return item_value
+
+    def get_order_value(self, order_id):
+
+        order_value = 0
+
+        for item_id, material_id, quantidade in self.get_order_items(order_id):
+            order_value = order_value + self.get_item_value(item_id)
+        
+        return order_value

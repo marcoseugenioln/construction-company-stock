@@ -197,6 +197,19 @@ def create_usuario():
         
     return redirect(url_for('usuario'))
 
+@app.route('/usurio/update/<id>', methods=['GET', 'POST'])
+def update_usuario(id):
+    if (request.method == 'POST' and 'email' in request.form and 'new_password' in request.form and is_admin in request.form):
+        
+        email = request.form['email']
+        new_password = request.form['new_password']
+        is_admin = request.form['is_admin']
+
+        database.update_user(id, email, new_password, is_admin)
+        return redirect(url_for('usuario'))  
+        
+    return redirect(url_for('usuario'))
+
 @app.route('/usuario/delete/<id>', methods=['GET', 'POST'])
 def delete_user(id):
     
@@ -205,8 +218,66 @@ def delete_user(id):
 
 @app.route('/pedido', methods=['GET', 'POST'])
 def pedido():
+    return render_template(
+        'pedido/index.html',
+        get_user_email=database.get_user_email,
+        get_order_value=database.get_order_value,
+        items = database.get_order_items(database.get_open_order_id()),
+        materiais = database.get_materials(), 
+        fornecedores = database.get_suppliers(),
+        pedidos = database.get_orders(),
+        view_order = False,
+        view_order_id = 0,
+        is_admin = session['is_admin']
+        )
+
+@app.route('/pedido/close', methods=['GET', 'POST'])
+def close_pedido():
+    database.close_order(session['user_id'])
+    return redirect(url_for('pedido'))
+
+@app.route('/pedido/view/<id>', methods=['GET', 'POST'])
+def view_pedido(id):
+    return render_template(
+        'pedido/index.html',
+        get_user_email=database.get_user_email,
+        get_item_value=database.get_item_value,
+        get_material_name=database.get_material_name,
+        get_order_value=database.get_order_value,
+        items = database.get_order_items(database.get_open_order_id()),
+        materiais = database.get_materials(), 
+        fornecedores = database.get_suppliers(),
+        pedidos = database.get_orders(),
+        closed_order_items = database.get_order_items(id),
+        view_order_items = True,
+        view_order_id = int(id),
+        is_admin = session['is_admin']
+        )
+
+@app.route('/item/create', methods=['GET', 'POST'])
+def create_item():
+    database.insert_empty_item()
+    return redirect(url_for('pedido'))
+
+@app.route('/item/update', methods=['GET', 'POST'])
+def update_item():
+
+    if (request.method == 'POST' and 'material_id' in request.form and 'quantity' in request.form and 'item_id' in request.form):
+        
+        item_id = request.form['item_id']
+        material_id = request.form['material_id']
+        quantity = request.form['quantity']
+
+        database.update_item(item_id, material_id, quantity)
+        return redirect(url_for('pedido'))
     
-    return render_template('pedido/index.html', materiais = database.get_materials(), fornecedores = database.get_suppliers(), pedidos = database.get_orders(),is_admin = session['is_admin'])
+    return redirect(url_for('pedido'))
+
+@app.route('/item/delete/<id>', methods=['GET', 'POST'])
+def delete_item(id):
+    database.delete_item(id)
+    return redirect(url_for('pedido'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)

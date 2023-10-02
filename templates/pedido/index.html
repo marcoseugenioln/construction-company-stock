@@ -2,29 +2,54 @@
 <html>
 
 <head>
-    <title>Fornecedores</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <title>Pedidos</title>
 </head>
  
 <body>
     {% include 'header.html'%}
-    <hr><h1>Fornecedores</h1><hr>
+    <hr><h1>Pedidos</h1><hr>
 
     <table>
-        {% for fornecedor_id, nome in fornecedores %}
-            {% if is_admin %}
-                    {% include '/fornecedor/update.html'%}
-            {% else %}
-                <tr>
-                    <td><label>{{ fornecedor_id }}</label></td><td><label>{{ nome }}</label></td>
-                </tr>
-            {% endif %}              
+        <tr>
+            <td><label class="text-field">ID</label></td>
+            <td><label class="text-field">Usuário</label></td>
+            <td><label class="text-field">Data</label></td>
+            <td><label class="text-field">Status</label></td>
+            <td><label class="text-field">Total (R$)</label></td>
+        </tr>
+
+        {% for id, usuario_id, data, status in pedidos %}
+            <tr>
+                <td><label>{{ id }}</label></td>
+                <td><label>{{ get_user_email(usuario_id) }}</label></td>
+                <td><label>{{ data }}</label></td>
+
+                {% if status == 1 %}
+                    <td><label>Aberto</label></td>
+                {% else %}
+                    <td><label>Fechado</label></td>
+                {% endif %}
+
+                <td><label>R$ {{ get_order_value(id) }}</label></td>
+
+                <form action="/pedido/view/{{ id }}">
+                    <td><input type="submit" class="btn" value="Visualizar" formmethod="post"></td>
+                </form>
+
+            </tr> 
+
+            {% if id == view_order_id %}
+                {% if view_order_items == True %}
+                    {% include 'pedido/view.html' %}
+                {% endif %}
+            {% endif %}
+
         {% endfor %}      
     </table>
-
-    {% if is_admin %}
-        {% include '/fornecedor/create.html' %}
-    {% endif %}  
- 
+    
+    {% include '/pedido/create.html' %} 
 </body>
  
 </html>

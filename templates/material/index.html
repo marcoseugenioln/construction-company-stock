@@ -21,18 +21,21 @@
         </tr>
 
         {% for id, fornecedor_id, nome, valor, estoque, estoque_minimo in materiais %}
-            {% if is_admin %}
-                    {% include '/material/update.html'%}
-            {% else %}
-                <tr>
-                    <td><label class="text-field">{{ id }}</label></td>
-                    <td><label class="text-field">{{ nome }}</label></td>
-                    <td><label class="text-field">{{ get_supplier(fornecedor_id) }}</label></td>
-                    <td><label class="text-field">R$ {{ valor }}</label></td>
-                    <td><label class="text-field">{{ estoque }}</label></td>
-                    <td><label class="text-field">{{ estoque_minimo }}</label></td>
-                </tr>
-            {% endif %}              
+
+            {% if id != 0%}
+                {% if is_admin %}
+                        {% include '/material/update.html'%}
+                {% else %}
+                    <tr>
+                        <td><label class="text-field">{{ id }}</label></td>
+                        <td><label class="text-field">{{ nome }}</label></td>
+                        <td><label class="text-field">{{ get_supplier(fornecedor_id) }}</label></td>
+                        <td><label class="text-field">R$ {{ valor }}</label></td>
+                        <td><label class="text-field">{{ estoque }}</label></td>
+                        <td><label class="text-field">{{ estoque_minimo }}</label></td>
+                    </tr>
+                {% endif %}     
+            {% endif %}          
         {% endfor %}
     </table>
 

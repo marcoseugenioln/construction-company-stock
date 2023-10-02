@@ -1,8 +1,20 @@
-<tr>
-    <hr><h3>Cadastrar Fornecedores</h3><hr>
-    <form action="/fornecedor/create">
-    <td><input type="text" name="supplier_name" value="" placeholder="Nome do Fornecedor"></td>
-    <td><input type="submit" value="Cadastrar" formmethod="post"></td>
-    <td></td>
-    </form>
-</tr>
+<hr><h1>Pedido Atual</h1><hr>
+
+<table>
+    {% for id, material_id, quantidade in items %}
+        {% include '/item/update.html'%}            
+    {% endfor %}
+</table>
+<br>
+<table>
+    <tr>
+
+        <!-- <td><input type="button" class="btn" value="Atualizar" onclick="updateItems()"></td> -->
+        
+        {% include '/item/create.html'%} 
+
+        <form action="/pedido/close">
+            <td><input type="submit" class="btn" value="Fechar Pedido" formmethod="post"></td>
+        </form>
+    </tr>
+</table>
