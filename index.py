@@ -30,7 +30,6 @@ def login():
 
     if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
         
-        # Create variables for easy access
         email = request.form['email']
         password = request.form['password']
 
@@ -38,6 +37,7 @@ def login():
 
             user_id = database.get_user_id(email, password)
 
+            logger.info(f"user_id: {user_id}")
             session['logged_in'] = True
             session['user_id'] = user_id
             session['is_admin'] = database.get_admin(user_id)
@@ -197,9 +197,9 @@ def create_usuario():
         
     return redirect(url_for('usuario'))
 
-@app.route('/usurio/update/<id>', methods=['GET', 'POST'])
+@app.route('/usuario/update/<id>', methods=['GET', 'POST'])
 def update_usuario(id):
-    if (request.method == 'POST' and 'email' in request.form and 'new_password' in request.form and is_admin in request.form):
+    if (request.method == 'POST' and 'email' in request.form and 'new_password' in request.form and 'is_admin' in request.form):
         
         email = request.form['email']
         new_password = request.form['new_password']
