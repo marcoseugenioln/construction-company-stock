@@ -29,8 +29,9 @@ CREATE TABLE IF NOT EXISTS material (
 -- pedido definition
 CREATE TABLE IF NOT EXISTS pedido (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	usuario_id INTEGER,
-	data_compra DATE,
+	usuario_id INTEGER DEFAULT(1),
+	data DATE DEFAULT(DATE('now')),
+	status INTEGER DEFAULT(1),
 	CONSTRAINT pedido_fk FOREIGN KEY (usuario_id) REFERENCES usuario(id)
 );
 
@@ -40,7 +41,6 @@ CREATE TABLE IF NOT EXISTS item (
 	pedido_id INTEGER,
 	material_id INTEGER,
 	quantidade INTEGER,
-	CONSTRAINT pedido_un UNIQUE (material_id),
 	CONSTRAINT pedido_fk_1 FOREIGN KEY (pedido_id) REFERENCES pedido(id),
 	CONSTRAINT pedido_fk_2 FOREIGN KEY (material_id) REFERENCES material(id)
 );
@@ -50,3 +50,5 @@ CREATE TABLE IF NOT EXISTS item (
 --########################################################
 
 INSERT OR IGNORE INTO usuario (email, password, is_admin) VALUES ('root@root.com', '-5078283684866250020', 1);
+INSERT OR IGNORE INTO fornecedor(id, nome) VALUES (0, '');
+INSERT OR IGNORE INTO material (id, fornecedor_id, nome, valor, estoque, estoque_minimo) VALUES (0, 0, '', 0, 0, 0);
