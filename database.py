@@ -54,14 +54,14 @@ class Database():
         return True
     
     def get_user_email(self, user_id: int) -> str:
-        self.query.execute(f"SELECT email FROM usuario WHERE id == '{user_id}'")
-        logger.info(f"SELECT email FROM usuario WHERE id == '{user_id}'")
+        self.query.execute(f"SELECT email FROM usuario WHERE id == {user_id}")
+        logger.info(f"SELECT email FROM usuario WHERE id == {user_id}")
         email = self.query.fetchone()[0]
         return email
 
     def get_user_password(self, user_id: int) -> str:
-        self.query.execute(f"SELECT password FROM usuario WHERE id == '{user_id}'")
-        logger.info(f"SELECT password FROM usuario WHERE id == '{user_id}'")
+        self.query.execute(f"SELECT password FROM usuario WHERE id == {user_id}")
+        logger.info(f"SELECT password FROM usuario WHERE id == {user_id}")
         password = self.query.fetchone()[0]
         return password
     
@@ -87,8 +87,8 @@ class Database():
         self.connection.commit()
 
     def update_user(self, user_id, email, password, is_admin):
-        self.query.execute(f"UPDATE usuario SET email = {email}, password = {password}, is_admin = {is_admin} WHERE id == {user_id};")
-        logger.info(f"UPDATE usuario SET email = {email}, password = {password}, is_admin = {is_admin} WHERE id == {user_id};")
+        self.query.execute(f"UPDATE usuario SET email = '{email}', password = '{password}', is_admin = {is_admin} WHERE id == {user_id};")
+        logger.info(f"UPDATE usuario SET email = '{email}', password = '{password}', is_admin = {is_admin} WHERE id == {user_id};")
         self.connection.commit()
 
     def get_suppliers(self):
