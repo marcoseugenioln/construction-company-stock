@@ -7,28 +7,31 @@
 </head>
  
 <body>
-    {% include 'header.html'%}
-    <hr><h1>Fornecedores</h1><hr>
+    {% include 'header/index.html'%}
 
-    <table>
+    <div class="item-div">
+        <h1>Fornecedores</h1>
 
-        <tr>
-            <td><label class="text-field">ID</label></td>
-            <td><label class="text-field">Nome</label></td>
-        </tr>
+        <table>
 
-        {% for fornecedor_id, nome in fornecedores %}
-            {% if is_admin %}
-                    {% include '/fornecedor/update.html'%}
-            {% else %}
-                <tr>
-                    <td><label class="text-field">{{ fornecedor_id }}</label></td>
-                    <td><label class="text-field">{{ nome }}</label></td>
-                </tr>
-            {% endif %}              
-        {% endfor %}
-            
-    </table>
+            <tr>
+                <td><label class="text-field">ID</label></td>
+                <td><label class="text-field">Nome</label></td>
+            </tr>
+    
+            {% for fornecedor_id, nome in fornecedores %}
+                {% if is_admin %}
+                        {% include '/fornecedor/update.html'%}
+                {% else %}
+                    <tr>
+                        <td><label class="text-field">{{ fornecedor_id }}</label></td>
+                        <td><label class="text-field">{{ nome }}</label></td>
+                    </tr>
+                {% endif %}              
+            {% endfor %}
+                
+        </table>
+    </div>
  
 </body>
  

@@ -11,32 +11,36 @@
 </head>
  
 <body>
-    {% include 'header.html'%}
-    {% if is_admin %}
-        <hr><h1>Usuários</h1><hr>
-    {% else %}
-        <hr><h1>Usuário</h1><hr>
-    {% endif %}
-    
+    {% include 'header/index.html'%}
 
-    <table>
-        <tr>
-            <td><label class="text-field">ID</label></td>
-            <td><label class="text-field">Email</label></td>
-            <td><label class="text-field">Senha</label></td>
-            <td><label class="text-field">Acesso</label></td>
-        </tr>
+    <div class="usuario-div">
         {% if is_admin %}
-            {% for id, email, password in usuarios %}
-                {% include '/usuario/update.html'%}                 
-            {% endfor %}
+            <hr><h1>Usuários</h1><hr>
         {% else %}
-            {% set id = current_user_id %}
-            {% set email = current_user_email %}
-            {% set password = current_user_password %}
-            {% include '/usuario/update.html'%}  
-        {% endif %}  
-    </table>
+            <hr><h1>Usuário</h1><hr>
+        {% endif %}
+        
+
+        <table>
+            <tr>
+                <td><label class="text-field">ID</label></td>
+                <td><label class="text-field">Email</label></td>
+                <td><label class="text-field">Senha</label></td>
+                <td><label class="text-field">Acesso</label></td>
+            </tr>
+            {% if is_admin %}
+                {% for id, email, password in usuarios %}
+                    {% include '/usuario/update.html'%}                 
+                {% endfor %}
+            {% else %}
+                {% set id = current_user_id %}
+                {% set email = current_user_email %}
+                {% set password = current_user_password %}
+                {% include '/usuario/update.html'%}  
+            {% endif %}  
+        </table>
+    </div>
+    
 
     {% if is_admin %}
         {% include '/usuario/create.html' %}

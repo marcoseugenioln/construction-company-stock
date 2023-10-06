@@ -3,7 +3,7 @@
     font-size: 14px;
 }
 
-.success-mesage{
+.success-message{
     color:green;
     font-size: 14px;
 }
@@ -17,10 +17,8 @@
 .header-btn{
     background-color:mediumblue;
     color:aliceblue;
-    width: 200px;
-    width: 150px;
-    height: 28px;
-    font-size: 14px;
+    width:fit-content;
+    height:fit-content;
     margin:10px;
     border-style: none;
     border-radius: 5px;
@@ -35,6 +33,20 @@
 .header-btn:hover{
     background-color:deepskyblue;
 }
+
+.header-btn-img{
+    width: 28px; 
+    height: 28px;
+    padding: 5px;
+
+}
+
+#logout-img{
+    transform: translateY(10px);
+    transform: translateX(2px);
+}
+
+
 
 .home-div{
     display:flex;
@@ -93,4 +105,66 @@
     width: 150px;
     height: 22px;
     padding: 1px;
+}
+
+.fornecedor-div{
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+}
+
+.create-fornecedor-div{
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+}
+
+.material-div{
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+}
+
+.create-material-div{
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+}
+
+.usuario-div{
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+}
+
+.create-usuario-div{
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+}
+
+.pedido-div{
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+}
+
+.pedido-atual-div{
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+}
+
+.login-div{
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content: center;
+}
+
+.index-div{
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content: center;
 }

@@ -7,28 +7,31 @@
 </head>
  
 <body>
-    {% include 'header.html'%}
-    <hr><h1>Página Inicial</h1><hr>
-    
-    <!-- this section can be replaced by a child document -->  
-    <br>
 
-    <div class="home-div">
-        <form action="/fornecedor">
-            <input type="submit" class="home-btn" value="Fornecedores" formmethod="post">
-        </form>
-    
-        <form action="/material">
-            <input type="submit" class="home-btn" value="Materiais" formmethod="post">
-        </form>
-    
-        <form action="/pedido">
-            <input type="submit" class="home-btn" value="Pedidos" formmethod="post">
-        </form>
-    
-        <form action="/usuario">
-            <input type="submit" class="home-btn" value="Usuário" formmethod="post">
-        </form>
+    {% include 'header/index.html'%}
+
+    <div class="index-div">
+
+        <h1>Página Inicial</h1>
+        <br>
+        <div class="home-div">
+            <form action="/fornecedor">
+                <input type="submit" class="home-btn" value="Fornecedores" formmethod="post">
+            </form>
+        
+            <form action="/material">
+                <input type="submit" class="home-btn" value="Materiais" formmethod="post">
+            </form>
+        
+            <form action="/pedido">
+                <input type="submit" class="home-btn" value="Pedidos" formmethod="post">
+            </form>
+        
+            <form action="/usuario">
+                <input type="submit" class="home-btn" value="Usuário" formmethod="post">
+            </form>
+            
+        </div>
     </div>
     
 </body>

@@ -1,6 +1,8 @@
 <tr>
-    <form action="/usuario/update/{{ id }}">
+    <form action="/usuario/update/{{ id }}" method="post">
+
         <td><label>{{ id }}</label></td>
+
         <td><input type="text" class="text-field" name="email" value="{{ email }}"></td>
         <td><input type="text" class="text-field" name="new_password" value="{{ password }}"></td>
 
@@ -17,20 +19,21 @@
                 </select>
             </td>
         {% else %}
+            <input name="is_admin" type="hidden" value="0"></label>
+
             <td>
-                <select class="combo-box" name="is_admin" disabled>
+                <select class="combo-box" disabled>
                     <option value="0" selected>Usuário</option>
-                    <option value="1">Administrador</option>
                 </select>
             </td>
         {% endif %}
 
-        <td><input type="submit" class="btn" value="Atualizar" formmethod="post"></td>
+        <td><input type="submit" class="btn" value="Atualizar"></td>
     </form>
 
     {% if is_admin %}
-        <form action="/usuario/delete/{{ id }}">
-            <td><input type="submit" class="btn" value="Apagar" formmethod="post"></td>
+        <form action="/usuario/delete/{{ id }}" method="post">
+            <td><input type="submit" class="btn" value="Apagar"></td>
         </form>
     {% endif %}
 </tr>
