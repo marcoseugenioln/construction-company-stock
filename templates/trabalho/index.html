@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <title>Trabalhos</title>
+</head>
+ 
+<body>
+    {% include 'header.html'%}
+    <hr><h1>Trabalhos</h1><hr>
+
+    <table>
+        <tr>
+            <td><label class="text-field">ID</label></td>
+            <td><label class="text-field">E-Mail</label></td>
+            <td><label class="text-field">Data</label></td>
+            <td><label class="text-field">Nome</label></td>
+            <td><label class="text-field">Status</label></td>
+            <td><label class="text-field">Total (R$)</label></td>
+        </tr>
+        {% for id, email, data, nome, status, valor in trabalhos %} {% if id %}
+            <tr>
+                <td><label>{{ id }}</label></td>
+                <td><label>{{ email }}</label></td>
+                <form action="/trabalho/update/{{ id }}">
+                <td><input type="text" class="text-field" name="name" value="{{ nome }}" placeholder="Nome do Trabalho"></td>
+                <td><input type="date" class="text-field" name="dia" value="{{ data }}" placeholder="Data Inicial"></td>
+                <td><label>R$ {{ valor }}</label></td>
+
+                {% if status == 1 %}
+                    <td><input type="submit" class="btn" value="Atualizar" formmethod="post"></td>
+                    </form>
+                    <td><form action="/trabalho/close/{{ id }}">
+                        <input type="submit" class="btn" value="Fechar" formmethod="post">
+                    </form></td>
+                    <td><form action="/trabalho/delete/{{ id }}">
+                        <input type="submit" class="btn" value="Apagar" formmethod="post">
+                    </form></td>
+                    <td><form action="/trabalho/view/{{ id }}">
+                        <input type="submit" class="btn" value="Visualizar" formmethod="post">
+                    </form></td>
+                {% else %}
+                    <td><label>Fechado</label></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                {% endif %}
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+    {% if trabalho_id %}
+        <hr><h1>Material necessário trabalho ID:{{ trabalho_id }}</h1><hr>
+        <table>
+            <tr>
+            <td><label class="text-field>">Material</label></td>
+            <td><label class="text-field>">Quantidade</label></td>
+            </tr>
+            {% for id, material_id, quantidade in trabalho_itens %}
+                <tr><form action="/item_trabalho/update/{{ id }}">
+                <td><select class="combo-box" name="material_id">
+                    {% for mat_id, material in materiais_para_trabalho %}
+                        {% if material_id == mat_id %}
+                            <option value="{{ mat_id }}" selected>{{ material }}</option>
+                        {% else %}
+                            <option value="{{ mat_id }}">{{ material }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select></td>
+                <td><input type="number" step="any" class="number-field" name="mat_qtd" value="{{ quantidade }}" placeholder="Quantidade usada"></td>
+                <td><input type="hidden" name="trabalho_id" value="{{ trabalho_id }}">
+                <input type="submit" class="btn" value="Atualizar" formmethod="post"></form></td>
+                <td><form action="/item_trabalho/delete/{{ id }}">
+                    <td><input type="hidden" name="trabalho_id" value="{{ trabalho_id }}">
+                    <input type="submit" class="btn" value="Apagar" formmethod="post"></form></td>
+                </tr>
+            {% endfor %}
+            <tr><form action="/item_trabalho/create">
+            <td><select class="combo-box" name="material_id">
+                {% for mat_id, material in materiais_para_trabalho %}
+                    <option value="{{ mat_id }}">{{ material }}</option>
+                {% endfor %}
+            </select></td>
+            <td><input type="number" step="any" class="number-field" name="mat_qtd" value="" placeholder="Quantidade usada"></td>
+            <td><input type="submit" class="btn" value="Cadastrar" formmethod="post"></td>
+            <td><input type="hidden" name="trabalho_id" value="{{ trabalho_id }}"></td>
+            </form></tr>
+        </table>
+    {%  endif %}
+    {% include 'trabalho/create.html' %}
+</body>
+ 
+</html>

@@ -30,7 +30,6 @@ def login():
 
     if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
         
-        # Create variables for easy access
         email = request.form['email']
         password = request.form['password']
 
@@ -38,6 +37,7 @@ def login():
 
             user_id = database.get_user_id(email, password)
 
+            logger.info(f"user_id: {user_id}")
             session['logged_in'] = True
             session['user_id'] = user_id
             session['is_admin'] = database.get_admin(user_id)
@@ -197,9 +197,9 @@ def create_usuario():
         
     return redirect(url_for('usuario'))
 
-@app.route('/usurio/update/<id>', methods=['GET', 'POST'])
+@app.route('/usuario/update/<id>', methods=['GET', 'POST'])
 def update_usuario(id):
-    if (request.method == 'POST' and 'email' in request.form and 'new_password' in request.form and is_admin in request.form):
+    if (request.method == 'POST' and 'email' in request.form and 'new_password' in request.form and 'is_admin' in request.form):
         
         email = request.form['email']
         new_password = request.form['new_password']
@@ -230,6 +230,64 @@ def pedido():
         view_order_id = 0,
         is_admin = session['is_admin']
         )
+
+@app.route('/trabalho', methods=['GET', 'POST'])
+def trabalho():
+    return render_template(
+        'trabalho/index.html',
+        trabalhos=database.get_works(),
+        )
+
+@app.route('/trabalho/view/<id>', methods=['GET', 'POST'])
+def trabalho_view(id):
+    """
+     todo: rotina de banco para fechar o trabalho
+    """
+    return render_template(
+        'trabalho/index.html',
+        trabalhos=database.get_works(),
+        trabalho_itens=database.get_work_items(id),
+        trabalho_id=id,
+        materiais_para_trabalho=database.get_works_material(),
+        )
+
+@app.route('/item_trabalho/create', methods=['GET', 'POST'])
+def item_trabalho_create():
+    if (request.method == 'POST' and session['user_id']):
+        database.insert_work_item(request.form['trabalho_id'], request.form['material_id'], request.form['mat_qtd'])
+    return redirect(f"/trabalho/view/{request.form['trabalho_id']}")
+
+@app.route('/item_trabalho/update/<id>', methods=['GET', 'POST'])
+def item_trabalho_update(id):
+    if (request.method == 'POST' and session['user_id']):
+        database.update_work_item(request.form['material_id'], request.form['mat_qtd'], id)
+    renda = f"/trabalho/view/{request.form['trabalho_id']}"
+    return redirect(renda)
+
+@app.route('/item_trabalho/delete/<id>', methods=['GET', 'POST'])
+def item_trabalho_delete(id):
+    if (request.method == 'POST' and session['user_id']):
+        database.delete_work_item(id)
+    renda = f"/trabalho/view/{request.form['trabalho_id']}"
+    return redirect(renda)
+
+@app.route('/trabalho/create', methods=['GET', 'POST'])
+def trabalho_create():
+    if (request.method == 'POST' and session['user_id']):
+        database.insert_work(session['user_id'], request.form['name'], request.form['dia'])
+    return redirect(url_for('trabalho'))
+
+@app.route('/trabalho/delete/<id>', methods=['GET', 'POST'])
+def trabalho_delete(id):
+    if (request.method == 'POST' and session['user_id']):
+        database.delete_work(session['user_id'], id)
+    return redirect(url_for('trabalho'))
+
+@app.route('/trabalho/update/<id>', methods=['GET', 'POST'])
+def trabalho_update(id):
+    if (request.method == 'POST' and session['user_id']):
+        database.update_work(session['user_id'], id, request.form['name'], request.form['dia'])
+    return redirect(url_for('trabalho'))
 
 @app.route('/pedido/close', methods=['GET', 'POST'])
 def close_pedido():
