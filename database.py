@@ -157,11 +157,13 @@ class Database():
 
     def get_works(self):
         self.query.execute(
-            "SELECT MIN(t.id) id, MIN(u.email) email, MIN(t.dia) data, MIN(t.nome) nome, MIN(t.status) status, SUM(m.valor) valor " 
+            "SELECT t.id id, u.email email, t.dia data, t.nome nome, t.status status, SUM(m.valor*it.quantidade) valor " 
             "FROM trabalho t "
             "LEFT JOIN item_trabalho it ON (t.id = it.trabalho_id) " 
             "LEFT JOIN material m ON (it.material_id = m.id) "
-            "LEFT JOIN usuario u ON t.usuario_id = u.id;")
+            "LEFT JOIN usuario u ON t.usuario_id = u.id "
+            "GROUP BY t.id, u.email, t.dia, t.nome, t.status "
+            ";")
         orders = self.query.fetchall()
         return orders
 
@@ -209,6 +211,18 @@ class Database():
         self.connection.commit()
         return True
 
+    def close_work(self, id):
+        self.query.execute("UPDATE material SET estoque = estoque - fqtd FROM "
+                            "    (SELECT usado.material_id, fqtd FROM "
+                            "        (SELECT material_id, SUM(quantidade) fqtd FROM item_trabalho it WHERE it.trabalho_id = ? GROUP BY material_id) usado "
+                            "    LEFT JOIN "
+                            "        (SELECT m.id material_id, m.estoque FROM material m) estoque "
+                            "    ON usado.material_id = estoque.material_id) baixa "
+                            "WHERE id = material_id", (id,))
+        self.query.execute("UPDATE trabalho SET status=0 WHERE id=?;", (id,))
+        self.connection.commit()
+        return True
+
     def delete_work(self, user_id, id):
         self.query.execute("DELETE FROM item_trabalho WHERE id=?;", (id,))
         self.query.execute("DELETE FROM trabalho WHERE id=?;", (id,))
@@ -239,7 +253,12 @@ class Database():
         return items
 
     def get_work_items(self, trabalho_id):
-        self.query.execute("SELECT id, material_id, quantidade FROM item_trabalho WHERE trabalho_id == ?", (trabalho_id,))
+        self.query.execute("SELECT t.trabalho_id id, t.material_id, m.nome, t.quantidade, m.estoque "
+            "    FROM "
+            "        (SELECT id trabalho_id, material_id, quantidade FROM item_trabalho WHERE trabalho_id == ?) t "
+            "    INNER JOIN "
+            "        (SELECT id material_id, nome, estoque FROM material) m "
+            "    ON m.material_id = t.material_id ", (trabalho_id,))
         items = self.query.fetchall()
         return items
 
@@ -276,6 +295,11 @@ class Database():
 
         stock = self.query.fetchone()[0]
         return int(stock)
+
+    def get_work_status(self, trabalho_id):
+        self.query.execute("SELECT status FROM trabalho WHERE id=?;", (trabalho_id,))
+        estado = self.query.fetchone()[0]
+        return int(estado)
 
     def add_to_stock(self, material_id, quantity):
         current_stock = self.get_stock(material_id)
@@ -321,3 +345,4 @@ class Database():
             order_value = order_value + self.get_item_value(item_id)
 
         return order_value
+

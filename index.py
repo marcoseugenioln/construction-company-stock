@@ -240,15 +240,26 @@ def trabalho():
 
 @app.route('/trabalho/view/<id>', methods=['GET', 'POST'])
 def trabalho_view(id):
-    """
-     todo: rotina de banco para fechar o trabalho
-    """
     return render_template(
         'trabalho/index.html',
         trabalhos=database.get_works(),
         trabalho_itens=database.get_work_items(id),
         trabalho_id=id,
         materiais_para_trabalho=database.get_works_material(),
+        trabalho_status=database.get_work_status(id),
+    )
+
+@app.route('/trabalho/close/<id>', methods=['GET', 'POST'])
+def trabalho_close(id):
+    if (request.method == 'POST' and session['user_id']):
+        database.close_work(id)
+    return render_template(
+        'trabalho/index.html',
+        trabalhos=database.get_works(),
+        trabalho_itens=database.get_work_items(id),
+        trabalho_id=id,
+        materiais_para_trabalho=database.get_works_material(),
+        trabalho_status=database.get_work_status(id),
         )
 
 @app.route('/item_trabalho/create', methods=['GET', 'POST'])
@@ -275,7 +286,7 @@ def item_trabalho_delete(id):
 def trabalho_create():
     if (request.method == 'POST' and session['user_id']):
         database.insert_work(session['user_id'], request.form['name'], request.form['dia'])
-    return redirect(url_for('trabalho'))
+    return redirect(url_for('/trabalho'))
 
 @app.route('/trabalho/delete/<id>', methods=['GET', 'POST'])
 def trabalho_delete(id):
