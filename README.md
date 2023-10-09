@@ -31,7 +31,7 @@ Dicas de como usar o git:
 
 ### Clonar o repositorio (dowload para trabalho)
 ```
-git clone https://github.com/marcoseugenioln/univesp-projeto-integrador-01.git
+git clone https://github.com/marcoseugenioln/construction-company-stock.git
 ```
 
 ### Criando a area de trabalho pessoal
