@@ -154,18 +154,89 @@ class Database():
         self.query.execute("SELECT id, usuario_id, data, status FROM pedido")
         orders = self.query.fetchall()
         return orders
-    
+
+    def get_works(self):
+        self.query.execute(
+            "SELECT t.id id, u.email email, t.dia data, t.nome nome, t.status status, SUM(m.valor*it.quantidade) valor " 
+            "FROM trabalho t "
+            "LEFT JOIN item_trabalho it ON (t.id = it.trabalho_id) " 
+            "LEFT JOIN material m ON (it.material_id = m.id) "
+            "LEFT JOIN usuario u ON t.usuario_id = u.id "
+            "GROUP BY t.id, u.email, t.dia, t.nome, t.status "
+            ";")
+        orders = self.query.fetchall()
+        return orders
+
+    def get_works_material(self):
+        self.query.execute(
+            "SELECT m.id, m.nome || ' - QTD: ' || estoque || ' - R$ ' || valor material "
+            "FROM material m ORDER BY material;")
+        rowsd = self.query.fetchall()
+        return rowsd
+
     def get_open_order_id(self):
         self.query.execute("SELECT id FROM pedido WHERE status == 1")
         order_id = self.query.fetchone()[0]
         return order_id
-    
+
+
     def insert_order(self, supplier_id, name, value, stock, min_stock):
         self.query.execute(f"INSERT OR IGNORE INTO material (fornecedor_id, nome, valor, estoque, estoque_minimo) VALUES ({supplier_id}, '{name}', {value}, {stock}, {min_stock});")
         logger.info(f"INSERT OR IGNORE INTO material (fornecedor_id, nome, valor, estoque, estoque_minimo) VALUES ({supplier_id}, '{name}', {value}, {stock}, {min_stock});")
         self.connection.commit()
         return True
-    
+
+    def insert_work(self, user_id, name, dia):
+        self.query.execute("INSERT OR IGNORE INTO trabalho (usuario_id, nome, dia) VALUES (?, ?, ?);", (user_id, name, dia))
+        self.connection.commit()
+        return True
+
+    def insert_work_item(self, trabalho_id, material_id, mat_qtd):
+        self.query.execute("INSERT INTO item_trabalho (trabalho_id, material_id, quantidade) VALUES(?, ?, ?);", (trabalho_id, material_id, mat_qtd))
+        self.connection.commit()
+        return True
+
+    def update_work_item(self, material_id, mat_qtd, id):
+        self.query.execute("UPDATE item_trabalho SET material_id=?, quantidade=? WHERE id=?;", (material_id, mat_qtd, id))
+        self.connection.commit()
+        return True
+
+    def delete_work_item(self, id):
+        self.query.execute("DELETE FROM item_trabalho WHERE id=?;", (id, ))
+        self.connection.commit()
+        return True
+
+    def update_work(self, user_id, id, name, dia):
+        self.query.execute("UPDATE trabalho SET dia=?, nome=? WHERE usuario_id=? AND id=?;", (dia, name, user_id, id))
+        self.connection.commit()
+        return True
+
+    def close_work(self, id):
+        self.query.execute("UPDATE material SET estoque = estoque - fqtd FROM "
+                            "    (SELECT usado.material_id, fqtd FROM "
+                            "        (SELECT material_id, SUM(quantidade) fqtd FROM item_trabalho it WHERE it.trabalho_id = ? GROUP BY material_id) usado "
+                            "    LEFT JOIN "
+                            "        (SELECT m.id material_id, m.estoque FROM material m) estoque "
+                            "    ON usado.material_id = estoque.material_id) baixa "
+                            "WHERE id = material_id", (id,))
+        self.query.execute("UPDATE trabalho SET status=0 WHERE id=?;", (id,))
+        self.connection.commit()
+        return True
+
+    def delete_work(self, user_id, id):
+        self.query.execute("DELETE FROM item_trabalho WHERE id=?;", (id,))
+        self.query.execute("DELETE FROM trabalho WHERE id=?;", (id,))
+        self.connection.commit()
+        return True
+
+    def insert_order(self, supplier_id, name, value, stock, min_stock):
+        self.query.execute(
+            f"INSERT OR IGNORE INTO material (fornecedor_id, nome, valor, estoque, estoque_minimo) VALUES ({supplier_id}, '{name}', {value}, {stock}, {min_stock});")
+        logger.info(
+            f"INSERT OR IGNORE INTO material (fornecedor_id, nome, valor, estoque, estoque_minimo) VALUES ({supplier_id}, '{name}', {value}, {stock}, {min_stock});")
+        self.connection.commit()
+        return True
+
     def update_order(self, id, supplier_id, name, value, stock, min_stock):
         self.query.execute(f"UPDATE material SET fornecedor_id = {supplier_id}, nome = '{name}', valor = {value}, estoque = {stock}, estoque_minimo = {min_stock} WHERE id == {id};")
         logger.info(f"UPDATE material SET fornecedor_id = {supplier_id}, nome = '{name}', valor = {value}, estoque = {stock}, estoque_minimo = {min_stock} WHERE id == {id};")
@@ -180,7 +251,17 @@ class Database():
         self.query.execute(f"SELECT id, material_id, quantidade FROM item WHERE pedido_id == {order_id}")
         items = self.query.fetchall()
         return items
-    
+
+    def get_work_items(self, trabalho_id):
+        self.query.execute("SELECT t.trabalho_id id, t.material_id, m.nome, t.quantidade, m.estoque "
+            "    FROM "
+            "        (SELECT id trabalho_id, material_id, quantidade FROM item_trabalho WHERE trabalho_id == ?) t "
+            "    INNER JOIN "
+            "        (SELECT id material_id, nome, estoque FROM material) m "
+            "    ON m.material_id = t.material_id ", (trabalho_id,))
+        items = self.query.fetchall()
+        return items
+
     def insert_empty_item(self):
         self.query.execute(f"INSERT INTO item (pedido_id, material_id, quantidade) VALUES ({self.get_open_order_id()}, 0, 0);")
         logger.info(f"INSERT INTO item (pedido_id, material_id, quantidade) VALUES ({self.get_open_order_id()}, 0, 0);")
@@ -213,6 +294,11 @@ class Database():
 
         stock = self.query.fetchone()[0]
         return int(stock)
+
+    def get_work_status(self, trabalho_id):
+        self.query.execute("SELECT status FROM trabalho WHERE id=?;", (trabalho_id,))
+        estado = self.query.fetchone()[0]
+        return int(estado)
 
     def add_to_stock(self, material_id, quantity):
         current_stock = self.get_stock(material_id)
@@ -250,3 +336,13 @@ class Database():
             order_value = order_value + self.get_item_value(item_id)
         
         return order_value
+
+    def get_work_value(self, order_id):
+
+        order_value = 0
+
+        for item_id, material_id, quantidade in self.get_work_items(order_id):
+            order_value = order_value + self.get_item_value(item_id)
+
+        return order_value
+

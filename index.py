@@ -230,6 +230,75 @@ def pedido():
         is_admin = session['is_admin']
         )
 
+@app.route('/trabalho', methods=['GET', 'POST'])
+def trabalho():
+    return render_template(
+        'trabalho/index.html',
+        trabalhos=database.get_works(),
+        )
+
+@app.route('/trabalho/view/<id>', methods=['GET', 'POST'])
+def trabalho_view(id):
+    return render_template(
+        'trabalho/index.html',
+        trabalhos=database.get_works(),
+        trabalho_itens=database.get_work_items(id),
+        trabalho_id=id,
+        materiais_para_trabalho=database.get_works_material(),
+        trabalho_status=database.get_work_status(id),
+    )
+
+@app.route('/trabalho/close/<id>', methods=['GET', 'POST'])
+def trabalho_close(id):
+    if (request.method == 'POST' and session['user_id']):
+        database.close_work(id)
+    return render_template(
+        'trabalho/index.html',
+        trabalhos=database.get_works(),
+        trabalho_itens=database.get_work_items(id),
+        trabalho_id=id,
+        materiais_para_trabalho=database.get_works_material(),
+        trabalho_status=database.get_work_status(id),
+        )
+
+@app.route('/item_trabalho/create', methods=['GET', 'POST'])
+def item_trabalho_create():
+    if (request.method == 'POST' and session['user_id']):
+        database.insert_work_item(request.form['trabalho_id'], request.form['material_id'], request.form['mat_qtd'])
+    return redirect(f"/trabalho/view/{request.form['trabalho_id']}")
+
+@app.route('/item_trabalho/update/<id>', methods=['GET', 'POST'])
+def item_trabalho_update(id):
+    if (request.method == 'POST' and session['user_id']):
+        database.update_work_item(request.form['material_id'], request.form['mat_qtd'], id)
+    renda = f"/trabalho/view/{request.form['trabalho_id']}"
+    return redirect(renda)
+
+@app.route('/item_trabalho/delete/<id>', methods=['GET', 'POST'])
+def item_trabalho_delete(id):
+    if (request.method == 'POST' and session['user_id']):
+        database.delete_work_item(id)
+    renda = f"/trabalho/view/{request.form['trabalho_id']}"
+    return redirect(renda)
+
+@app.route('/trabalho/create', methods=['GET', 'POST'])
+def trabalho_create():
+    if (request.method == 'POST' and session['user_id']):
+        database.insert_work(session['user_id'], request.form['name'], request.form['dia'])
+    return redirect(url_for('/trabalho'))
+
+@app.route('/trabalho/delete/<id>', methods=['GET', 'POST'])
+def trabalho_delete(id):
+    if (request.method == 'POST' and session['user_id']):
+        database.delete_work(session['user_id'], id)
+    return redirect(url_for('trabalho'))
+
+@app.route('/trabalho/update/<id>', methods=['GET', 'POST'])
+def trabalho_update(id):
+    if (request.method == 'POST' and session['user_id']):
+        database.update_work(session['user_id'], id, request.form['name'], request.form['dia'])
+    return redirect(url_for('trabalho'))
+
 @app.route('/pedido/close', methods=['GET', 'POST'])
 def close_pedido():
     database.order_service(session['user_id'])

@@ -8,30 +8,26 @@
  
 <body>
 
-    {% include 'header/index.html'%}
+    <div class="home-div">
+        <form action="/fornecedor">
+            <input type="submit" class="home-btn" value="Fornecedores" formmethod="post">
+        </form>
+    
+        <form action="/material">
+            <input type="submit" class="home-btn" value="Materiais" formmethod="post">
+        </form>
+    
+        <form action="/pedido">
+            <input type="submit" class="home-btn" value="Pedidos" formmethod="post">
+        </form>
+    
+        <form action="trabalho">
+            <input type="submit" class="home-btn" value="Trabalhos" formmethod="post">
+        </form>
 
-    <div class="index-div">
-
-        <h1>Página Inicial</h1>
-        <br>
-        <div class="home-div">
-            <form action="/fornecedor">
-                <input type="submit" class="home-btn" value="Fornecedores" formmethod="post">
-            </form>
-        
-            <form action="/material">
-                <input type="submit" class="home-btn" value="Materiais" formmethod="post">
-            </form>
-        
-            <form action="/pedido">
-                <input type="submit" class="home-btn" value="Pedidos" formmethod="post">
-            </form>
-        
-            <form action="/usuario">
-                <input type="submit" class="home-btn" value="Usuário" formmethod="post">
-            </form>
-            
-        </div>
+        <form action="/usuario">
+            <input type="submit" class="home-btn" value="Usuários" formmethod="post">
+        </form>
     </div>
     
 </body>

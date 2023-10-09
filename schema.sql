@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS pedido (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	usuario_id INTEGER DEFAULT(1),
 	data DATE DEFAULT(DATE('now')),
-	status INTEGER DEFAULT(1),
+    status INTEGER DEFAULT(1),
 	CONSTRAINT pedido_fk FOREIGN KEY (usuario_id) REFERENCES usuario(id)
 );
 
@@ -43,6 +43,26 @@ CREATE TABLE IF NOT EXISTS item (
 	quantidade INTEGER,
 	CONSTRAINT pedido_fk_1 FOREIGN KEY (pedido_id) REFERENCES pedido(id),
 	CONSTRAINT pedido_fk_2 FOREIGN KEY (material_id) REFERENCES material(id)
+);
+
+-- trabalho definition
+CREATE TABLE IF NOT EXISTS trabalho (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	usuario_id INTEGER DEFAULT(1),
+	dia DATE DEFAULT(DATE('now')),
+	nome TEXT(300),
+	status INTEGER DEFAULT(1),
+	CONSTRAINT trabalho_fk FOREIGN KEY (usuario_id) REFERENCES usuario(id)
+);
+
+-- item definition
+CREATE TABLE IF NOT EXISTS item_trabalho (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	trabalho_id INTEGER,
+	material_id INTEGER,
+	quantidade INTEGER,
+	CONSTRAINT trabalho_fk_1 FOREIGN KEY (trabalho_id) REFERENCES trabalho(id),
+	CONSTRAINT trabalho_fk_2 FOREIGN KEY (material_id) REFERENCES material(id)
 );
 
 --########################################################
