@@ -46,34 +46,6 @@
     transform: translateX(2px);
 }
 
-
-
-.home-div{
-    display:flex;
-    align-items: center;
-    flex-direction: row;
-}
-
-.home-btn{
-    background-color:mediumblue;
-    color:aliceblue;
-    width: 200px;
-    height: 200px;
-    margin:50px;
-    font-size: 22px;
-    border-style: none;
-    border-radius: 5px;
-}
-
-.home-btn:active {
-    background-color: mediumblue;
-    transform: translateY(1px);
-    transform: translateX(1px);
-}
-.home-btn:hover{
-    background-color:deepskyblue;
-}
-
 .btn{
     background-color:mediumblue;
     color:aliceblue;
@@ -107,67 +79,13 @@
     padding: 1px;
 }
 
-.fornecedor-div{
-    display: flex;
-    flex-direction:column;
-    align-items: center;
-}
-
-.create-fornecedor-div{
-    display: flex;
-    flex-direction:column;
-    align-items: center;
-}
-
-.material-div{
-    display: flex;
-    flex-direction:column;
-    align-items: center;
-}
-
-.create-material-div{
-    display: flex;
-    flex-direction:column;
-    align-items: center;
-}
-
-.usuario-div{
-    display: flex;
-    flex-direction:column;
-    align-items: center;
-}
-
-.create-usuario-div{
-    display: flex;
-    flex-direction:column;
-    align-items: center;
-}
-
-.pedido-div{
-    display: flex;
-    flex-direction:column;
-    align-items: center;
-}
-
-.pedido-atual-div{
-    display: flex;
-    flex-direction:column;
-    align-items: center;
-}
-
-.login-div{
+.centralized-div{
     display: flex;
     flex-direction:column;
     align-items: center;
     justify-content: center;
 }
 
-.index-div{
-    display: flex;
-    flex-direction:column;
-    align-items: center;
-    justify-content: center;
-}
 .text-warning{
     font-size: 14px;
     width: 150px;
