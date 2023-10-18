@@ -3,7 +3,7 @@
     font-size: 14px;
 }
 
-.success-mesage{
+.success-message{
     color:green;
     font-size: 14px;
 }
@@ -17,10 +17,8 @@
 .header-btn{
     background-color:mediumblue;
     color:aliceblue;
-    width: 200px;
-    width: 150px;
-    height: 28px;
-    font-size: 14px;
+    width:fit-content;
+    height:fit-content;
     margin:10px;
     border-style: none;
     border-radius: 5px;
@@ -36,30 +34,16 @@
     background-color:deepskyblue;
 }
 
-.home-div{
-    display:flex;
-    align-items: center;
-    flex-direction: row;
+.header-btn-img{
+    width: 28px; 
+    height: 28px;
+    padding: 5px;
+
 }
 
-.home-btn{
-    background-color:mediumblue;
-    color:aliceblue;
-    width: 200px;
-    height: 200px;
-    margin:50px;
-    font-size: 22px;
-    border-style: none;
-    border-radius: 5px;
-}
-
-.home-btn:active {
-    background-color: mediumblue;
-    transform: translateY(1px);
-    transform: translateX(1px);
-}
-.home-btn:hover{
-    background-color:deepskyblue;
+#logout-img{
+    transform: translateY(10px);
+    transform: translateX(2px);
 }
 
 .btn{
@@ -93,6 +77,13 @@
     width: 150px;
     height: 22px;
     padding: 1px;
+}
+
+.centralized-div{
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content: center;
 }
 
 .text-warning{

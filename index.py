@@ -212,7 +212,6 @@ def update_usuario(id):
 
 @app.route('/usuario/delete/<id>', methods=['GET', 'POST'])
 def delete_user(id):
-    
     database.delete_user(id)
     return redirect(url_for('usuario'))
 
@@ -286,7 +285,7 @@ def item_trabalho_delete(id):
 def trabalho_create():
     if (request.method == 'POST' and session['user_id']):
         database.insert_work(session['user_id'], request.form['name'], request.form['dia'])
-    return redirect(url_for('/trabalho'))
+    return redirect(url_for('trabalho'))
 
 @app.route('/trabalho/delete/<id>', methods=['GET', 'POST'])
 def trabalho_delete(id):
@@ -302,7 +301,7 @@ def trabalho_update(id):
 
 @app.route('/pedido/close', methods=['GET', 'POST'])
 def close_pedido():
-    database.close_order(session['user_id'])
+    database.order_service(session['user_id'])
     return redirect(url_for('pedido'))
 
 @app.route('/pedido/view/<id>', methods=['GET', 'POST'])

@@ -5,35 +5,37 @@
     </head>
 
     <body>
-        <hr><h1>LOGIN</h1><hr>
-        {% if not is_login_valid %}
-            <p class="error-message"> Login inválido </p>
-        {% endif %}
-        {% if user_registered %}
-            <p class="success-message"> Usuário registrado </p>
-        {% endif %}
 
-        <div class="tema">
-            <div class="int">
+        <div class="centralized-div">
 
-                <form method="POST">
-                    
-                    <br/>Email:
-                    <br/><input type="text" name="email"/> 
+            <h1>LOGIN</h1>
 
-                    <br/>Senha:
-                    <br/><input type="password" name="password"/> <br/>
+            {% if not is_login_valid %}
+                <p class="error-message"> Login inválido </p>
+            {% endif %}
 
-                    <br/><input type="checkbox" name="lembrar-me" value="lembrar-me">Lembrar-me<br><br/>
-                    <br/><input type="submit" class="btn" value="Entrar"/> <br/>
+            {% if user_registered %}
+                <p class="success-message"> Usuário registrado </p>
+            {% endif %}
 
-                </form>
+            <form method="POST">
+                
+                Email:<br>
+                <input type="text" name="email" class="text-field"/><br><br>
 
-                <form action="/register">
-                    <td><input type="submit" class="btn" value="Registrar-se" formmethod="post"></td>
-                </form>
+                Senha:<br>
+                <input type="password" name="password" class="text-field"/><br><br>
 
-            </div>
+                <input type="checkbox" name="lembrar-me" value="lembrar-me">Lembrar-me</input><br><br>
+                <input type="submit" class="btn" value="Entrar"/><br>
+
+            </form>
+
+    
+            <form action="/register" method="POST">
+                <td><input type="submit" class="btn" value="Registrar-se"></td>
+            </form> 
+
         </div>  
     </body>
 
