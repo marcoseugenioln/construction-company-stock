@@ -192,10 +192,13 @@ def create_usuario():
         else:
             is_admin = "0"
 
-        if database.insert_user(email, new_password, is_admin):
-            return redirect(url_for('usuario'))  
+        database.insert_user(email, new_password, is_admin)
         
-    return redirect(url_for('usuario'))
+    if 'logged_in' in session:
+        if session['logged_in'] != True:
+            return redirect(url_for('usuario'))
+        
+    return redirect(url_for('index'))
 
 @app.route('/usuario/update/<id>', methods=['GET', 'POST'])
 def update_usuario(id):
