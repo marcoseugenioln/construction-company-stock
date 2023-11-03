@@ -164,7 +164,7 @@ def update_material(id):
 def delete_material(id):
     
     database.delete_material(id)
-    return redirect(url_for('fornecedor'))
+    return redirect(url_for('material'))
 
 @app.route('/usuario', methods=['GET', 'POST'])
 def usuario():
