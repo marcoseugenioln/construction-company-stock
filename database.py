@@ -212,13 +212,17 @@ class Database():
         return True
 
     def close_work(self, id):
-        self.query.execute("UPDATE material SET estoque = estoque - fqtd FROM "
-                            "    (SELECT usado.material_id, fqtd FROM "
-                            "        (SELECT material_id, SUM(quantidade) fqtd FROM item_trabalho it WHERE it.trabalho_id = ? GROUP BY material_id) usado "
-                            "    LEFT JOIN "
-                            "        (SELECT m.id material_id, m.estoque FROM material m) estoque "
-                            "    ON usado.material_id = estoque.material_id) baixa "
-                            "WHERE id = material_id", (id,))
+        self.query.execute("UPDATE material "
+            "SET estoque = estoque - ( "
+            "    SELECT SUM(quantidade) "
+            "    FROM item_trabalho it "
+            "    WHERE it.trabalho_id = ? AND it.material_id = material.id "
+            ") "
+            "WHERE id IN ( "
+            "    SELECT material_id "
+            "    FROM item_trabalho it "
+            "    WHERE it.trabalho_id = ? "
+            ") ", (id, id))
         self.query.execute("UPDATE trabalho SET status=0 WHERE id=?;", (id,))
         self.connection.commit()
         return True
