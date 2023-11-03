@@ -164,7 +164,7 @@ def update_material(id):
 def delete_material(id):
     
     database.delete_material(id)
-    return redirect(url_for('fornecedor'))
+    return redirect(url_for('material'))
 
 @app.route('/usuario', methods=['GET', 'POST'])
 def usuario():
@@ -193,9 +193,10 @@ def create_usuario():
             is_admin = "0"
 
         if database.insert_user(email, new_password, is_admin):
-            return redirect(url_for('usuario'))  
-        
-    return redirect(url_for('usuario'))
+            if 'user_id' in session:
+                return redirect(url_for('usuario'))
+
+        return redirect('/login')
 
 @app.route('/usuario/update/<id>', methods=['GET', 'POST'])
 def update_usuario(id):

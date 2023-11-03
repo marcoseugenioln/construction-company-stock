@@ -4,10 +4,10 @@
             <h1>Cadastrar Usuário</h1>
             <form action="/usuario/create">
                 <td><input type="text" class="text-field" name="email" placeholder="Email"></td>
-                <td><input type="text" class="text-field" name="new_password" placeholder="Senha"></td>
+                <td><input type="password" class="text-field" name="new_password" placeholder="Senha"></td>
         
                 {% if not logged_in %}
-                    <td><input type="text" class="text-field" name="c_password" placeholder="Confirmar Senha"></td>
+                    <td><input type="password" class="text-field" name="c_password" placeholder="Confirmar Senha"></td>
                 {% endif %}
         
                 {% if is_admin %}

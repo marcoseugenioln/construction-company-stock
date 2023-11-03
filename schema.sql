@@ -73,7 +73,8 @@ INSERT OR IGNORE INTO usuario (email, password, is_admin) VALUES
 ('root@root.com', 'root', 1),
 ('marcos@root.com', 'root', 1),
 ('castilho@root.com', 'root', 1),
-('user@user.com', 'user', 0);
+('user@user.com', 'user', 0),
+('caco@alternativac.com.br', 'EstudoUnivesp123', 1);
 
 INSERT OR IGNORE INTO fornecedor(id, nome) VALUES (0, '');
 INSERT OR IGNORE INTO fornecedor(nome) VALUES 
@@ -86,7 +87,8 @@ INSERT OR IGNORE INTO fornecedor(nome) VALUES
 ('Deposito da Vila'), 
 ('Deposito Alves'), 
 ('Alfa Materiais Hidraulicos'), 
-('Construindo Sobre Areia S.A');
+('Construindo Sobre Areia S.A'),
+('JR Madeiras S/A');
 
 INSERT OR IGNORE INTO material (id, fornecedor_id, nome, valor, estoque, estoque_minimo) VALUES (0, 0, '', 0, 0, 0);
 INSERT OR IGNORE INTO material (fornecedor_id, nome, valor, estoque, estoque_minimo) VALUES 
@@ -99,7 +101,10 @@ INSERT OR IGNORE INTO material (fornecedor_id, nome, valor, estoque, estoque_min
 (4, 'Chave de Fenda', 10, 0, 0), 
 (4, 'Chave de Philips', 10, 0, 0), 
 (5, 'Chave de Boca 8mm', 10, 0, 0), 
-(5, 'Chave de Boca 5mm', 10, 0, 0);
+(5, 'Chave de Boca 5mm', 10, 0, 0),
+(11, 'Chapa Branca MDF 18 mm', 125, 10, 10),
+(11, 'Chapa Branca MDF 25 mm', 155, 10, 10),
+(11, 'Chapa Branca MDF 15 mm', 120, 10, 10);
 
-INSERT OR IGNORE INTO pedido (id, usuario_id, data, status) VALUES (1, 1, DATE('now'), 1);
+INSERT OR IGNORE INTO pedido (id, usuario_id, data, status) VALUES (1, 5, DATE('now'), 1);
 

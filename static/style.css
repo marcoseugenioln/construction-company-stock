@@ -79,6 +79,13 @@
     padding: 1px;
 }
 
+.password-field{
+    font-size: 14px;
+    width: 150px;
+    height: 22px;
+    padding: 1px;
+}
+
 .centralized-div{
     display: flex;
     flex-direction:column;

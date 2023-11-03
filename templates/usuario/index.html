@@ -35,7 +35,7 @@
             {% else %}
                 {% set id = current_user_id %}
                 {% set email = current_user_email %}
-                {% set password = current_user_password %}
+                {% set password = 'current_user_password' %}
                 {% include '/usuario/update.html'%}  
             {% endif %}  
         </table>
